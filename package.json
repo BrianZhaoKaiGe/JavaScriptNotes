@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
+  },
+  "devDependencies": {
+    "@vuepress/plugin-search": "^2.0.0-beta.49",
+    "vuepress": "^2.0.0-beta.49",
+    "vuepress-plugin-fulltext-search": "^2.2.1",
+    "vuepress-plugin-nuggets-style-copy": "^1.0.3"
+  },
+  "dependencies": {
+    "hexo-helper-live2d": "^3.1.1",
+    "moment": "^2.29.4",
+    "vuepress-plugin-copy-code2": "^2.0.0-beta.89",
+    "vuepress-plugin-helper-live2d": "^1.0.2"
+  }
+}

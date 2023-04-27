@@ -1,0 +1,3 @@
+<template><div><h1 id="记录收集到的面试题。" tabindex="-1"><a class="header-anchor" href="#记录收集到的面试题。" aria-hidden="true">#</a> 记录收集到的面试题。</h1>
+<h1 id="温故而知新-可以为师矣。" tabindex="-1"><a class="header-anchor" href="#温故而知新-可以为师矣。" aria-hidden="true">#</a> 温故而知新，可以为师矣。</h1>
+</div></template>
