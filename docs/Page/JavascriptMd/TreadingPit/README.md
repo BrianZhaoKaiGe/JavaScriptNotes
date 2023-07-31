@@ -126,3 +126,60 @@ page-break-inside: avoid !important;
 ```
 git commit -m '提交信息' --no-verify
 ```
+
+## 6.antd表单label右对齐不生效
+
+原因：label标签的宽度被限制了
+
+解决：给label标签添加宽度
+
+## 7.antd表单DatePicker日期选择器只能选择今天及之后
+
+引入moment
+
+```javascript
+import moment from 'moment';
+
+//定义方法
+const disabledDate = (current: any) => {
+		return current < moment().startOf('day');
+}
+
+
+//组件使用
+<DatePicker disabledDate={disabledDate} format="YYYY-MM-DD HH:mm:ss" />
+
+
+```
+
+## 8.路由跳转，页面没有在顶部解决方法
+
+
+
+```react
+useEffect(() => {
+    
+		window.scrollTo(0, 0)
+    
+})
+
+```
+
+## 9.antd表格表头右侧小竖线取消
+
+```
+.ant-table-cell::before{
+			display: none;
+		}
+```
+
+## 10.在全局样式中穿透第三方样式不需要加:global
+
+## 11.antdTab组件改变底下那根线
+
+```css
+.ant-tabs-ink-bar {
+		background-image: linear-gradient(to right, rgba(106, 236, 229, 1) 16.66%, rgba(13, 85, 225, 1) 16.66%, rgba(13, 85, 225, 1) 78.70%, rgba(48, 141, 224, 1) 78.70%, rgba(48, 141, 224, 1) 98.09%,rgba(106, 236, 229, 1) 98.09%, rgba(106, 236, 229, 1) 100.00%);
+	}
+```
+
