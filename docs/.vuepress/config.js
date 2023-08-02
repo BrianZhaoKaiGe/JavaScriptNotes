@@ -9,6 +9,7 @@ module.exports = {
   port: 8888,
   description: '逝者如斯夫，不舍昼夜',
   colorModeSwitch: true,
+  base: '/JavaScriptNotes/',
   head: [['link', { rel: 'icon', href: '/images/logo.png' }]],
   theme: defaultTheme({
     lastUpdatedText:'上次更新',
