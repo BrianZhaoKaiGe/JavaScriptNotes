@@ -175,11 +175,98 @@ useEffect(() => {
 
 ## 10.在全局样式中穿透第三方样式不需要加:global
 
-## 11.antdTab组件改变底下那根线
+## 11.antd Tab 组件改变底下那根线
 
 ```css
 .ant-tabs-ink-bar {
 		background-image: linear-gradient(to right, rgba(106, 236, 229, 1) 16.66%, rgba(13, 85, 225, 1) 16.66%, rgba(13, 85, 225, 1) 78.70%, rgba(48, 141, 224, 1) 78.70%, rgba(48, 141, 224, 1) 98.09%,rgba(106, 236, 229, 1) 98.09%, rgba(106, 236, 229, 1) 100.00%);
 	}
+```
+
+# 12.jspdf插件导出pdf问题
+
+1.导出后文字被切割问题
+
+解决：取出所有标签，判断当前页的最后一个元素是否超过了A4一页的高度，超过就在其前面添加一个空元素把其挤下去
+
+代码：
+
+```javascript
+
+                const A4_WIDTH = 592.28;
+                const A4_HEIGHT = 841.89;
+                let imageWrapper = document.getElementById("printArea"); // 获取DOM
+
+                let pageHeight = imageWrapper.scrollWidth / A4_WIDTH * A4_HEIGHT;
+                let lableListID = imageWrapper.querySelectorAll(".exportMark");
+            
+		 // 进行分割操作，当dom内容已超出a4的高度，则将该dom前插入一个空dom，把他挤下去，分割
+                    for (let i = 0; i < lableListID.length; i++) {
+                        let multiple = Math.ceil((lableListID[i].offsetTop + lableListID[i].offsetHeight) / pageHeight);
+                        
+                        if (this.isSplit(lableListID, i, multiple * pageHeight)) {
+                            let divParent = lableListID[i].parentNode; // 获取该div的父节点
+                            let newNode = document.createElement('div');
+                            newNode.className = 'emptyDiv';
+                            newNode.style.background = '#ffffff';
+                            let _H = multiple * pageHeight - (lableListID[i].offsetTop + lableListID[i].offsetHeight);
+                            
+                            //留白
+                            newNode.style.height = _H + 40 + 'px';
+                            newNode.style.width = '100%';
+                            let next = lableListID[i].nextSibling; // 获取div的下一个兄弟节点
+                            // 判断兄弟节点是否存在
+                            if (next) {
+                                // 存在则将新节点插入到div的下一个兄弟节点之前，即div之后
+                                divParent.insertBefore(newNode, next);
+                            } else {
+                                // 不存在则直接添加到最后,appendChild默认添加到divParent的最后
+                                divParent.appendChild(newNode);
+                            }
+                        }
+                    }
+```
+
+2.添加页眉问题---图片,页脚问题
+
+```javascript
+ 	//在html2canvas的then
+ 	// 创建一个新的 Image 对象
+	var img = new Image();
+	// 设置图像的 src 属性
+    img.src = 'image/genEXportPDFLogo.png';
+    // 添加 onload 事件处理程序--图片必须在onload中处理，否则会报错
+   img.onload = function () {
+     for (let i = 0; renderedHeight < canvas.height; i++) {
+       let page = document.createElement("canvas");
+          page.width = canvas.width;
+         	//可能内容不足一页
+         page.height = Math.min(imgHeight, canvas.height - renderedHeight);
+         //用getImageData剪裁指定区域，并画到前面创建的canvas对象中
+		 page.getContext('2d').putImageData(ctx.getImageData(0, renderedHeight, canvas.width, Math.min(imgHeight, canvas.height - renderedHeight)), 0, 0);
+         //添加图像到页面，保留10mm边距，---10，x轴，20是y轴偏移量
+         pdf.addImage(page.toDataURL('image/jpeg', 0.2), 'JPEG', 10, 20, a4w, Math.min(a4h, a4w * page.height / page.width));    
+
+        //添加页眉的logo
+    	pdf.addImage(img, 'PNG', 10, 0, a4w, 20);
+		// 为每一页添加
+         pdf.setPage(i + 1);
+         //设置字体包--要引入
+         pdf.setFont("simhei");
+         //字体大小
+         pdf.setFontSize(7);
+         //添加页脚
+         pdf.text('Sangon市场、法务部监制 文档编号: SGJY201607A 版本号: V1.0', 10, 285);
+         renderedHeight += imgHeight;
+         if (renderedHeight < canvas.height)
+           pdf.addPage();//如果后面还有内容，添加一个空页
+            }
+       
+         pdf.save(_this.pageData.code && _this.pageData.code + 'pdf');
+
+       };
+    
+    
+    
 ```
 
