@@ -270,3 +270,12 @@ useEffect(() => {
     
 ```
 
+# 13.uniapp uni-easyinput组件textarea属性去除在支付宝小程序右下角的数字统计
+
+源码中添加  ：show-count="false"
+
+# 14.Taro在支付宝小程序中阻止滚动穿透的问题，钉钉小程序阻止滚动穿透
+
+添加 disable-scroll 属性 
+
+ disable-scroll = “true”

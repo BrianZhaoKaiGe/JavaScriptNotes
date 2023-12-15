@@ -248,6 +248,77 @@ let getFloat =  (number, n)=> {
 
 	};
 
+/** 参数说明：
+ * 根据长度截取先使用字符串，超长部分追加…
+ * str 对象字符串
+ * len 目标字节长度
+ * 返回值： 处理结果字符串
+ */
+export const cutString = (str, len) => {
+	if (!str) return false;
+	let returnValue = '';
+	let byteValLen = 0;
+	for (let i = 0; i < str.length; i++) {
+		if (str[i].match(/[^\x00-\xff]/gi) !== null) byteValLen += 2;
+		else byteValLen += 1;
+		if (byteValLen > len) break;
+		returnValue += str[i];
+	}
+	if (byteValLen > len) {
+		return returnValue + '...';
+	}
+	return returnValue;
+};
+
+/**
+ * 随机生成颜色
+ */
+export const getrandomColor = () => {
+	const colorStr = Math.floor(Math.random() * 0xffffff)
+		.toString(16)
+		.toUpperCase();
+	let color = `#${'000000'.substring(0, 6 - colorStr)}${colorStr}`;
+	color = color.length === 7 ? color : getrandomColor();
+	return color;
+};
+
+/**
+ * 二维数组转换成一维数组加对象
+ * @param {Array} value 需要转换的数组
+ */
+export const arrChangeObject = value => {
+	let arr = [];
+	for (let i = 0; i < value.length; i++) {
+		let temp = {};
+		value[i].forEach((item, index) => {
+			const tempJson = {
+				[index]: item,
+			};
+			temp = {
+				...temp,
+				...tempJson,
+			};
+		});
+		arr = [...arr, temp];
+	}
+	return arr;
+};
+
+/**
+ * 保留小数
+ * @param {Number} value 传入的值
+ * @param {Number} num 保留的位数
+ */
+export const keepDecimal = (value, num = 2) => {
+	if (typeof value !== 'number') return value;
+	return value &&
+		value.toString().split('.').length !== 1 &&
+		value.toString().split('.')[1].length > num
+		? Number(value.toFixed(num))
+		: value;
+};
+
+
 
 ```
 
