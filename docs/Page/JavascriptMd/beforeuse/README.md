@@ -324,3 +324,65 @@ export const keepDecimal = (value, num = 2) => {
 
 
 
+# 查看更多组件
+
+```react
+import { useToggle } from 'ahooks';
+import React from 'react';
+
+import './index.less';
+
+interface IProps {
+	/* 渲染的list */
+	list: React.ReactNode[];
+	/* limit */
+	limit?: number;
+	/* 自定义渲染 */
+	renderItem?: (item: any, i: number) => React.ReactNode;
+	/* 自定义展开节点 */
+	more?: React.ReactNode;
+	/* 是否显示折叠隐藏 */
+	showFold?: boolean;
+	/* 自定义折叠隐藏渲染 */
+	hideMore?: React.ReactNode;
+}
+
+const LimitCollapse: React.FC<IProps> = (props) => {
+	const { list = [], renderItem, limit = 5, more, showFold, hideMore } = props;
+	const [fold, { toggle }] = useToggle(true);
+
+	const reItem = (item: any, i: number) => {
+		if (renderItem && typeof renderItem) {
+			return renderItem(item, i);
+		}
+		return item;
+	};
+
+	const showList = list?.slice?.(0, limit);
+	const hideList = list?.slice?.(limit, list.length);
+
+	return (
+		<>
+			{showList?.map(reItem)}
+
+			{fold && limit < list.length && (
+				<span className="sg-limit-collapse-unfold" onClick={toggle}>
+					{!more ? '+更多' : more}
+				</span>
+			)}
+
+			{!fold && hideList?.map((item, i) => reItem(item, i + limit))}
+
+			{!fold && showFold && (
+				<span className="sg-limit-collapse-fold" onClick={toggle}>
+					{!hideMore ? '-折叠' : hideMore}
+				</span>
+			)}
+		</>
+	);
+};
+
+export default React.memo(LimitCollapse);
+
+```
+
